@@ -29,6 +29,7 @@ final class SproutlyUITests: XCTestCase {
         app.launch()
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        XCTAssertTrue(app.state == .runningForeground, "App should be running in foreground")
     }
 
     @MainActor

@@ -9,7 +9,7 @@
 import Foundation
 
 struct AppDependencies {
-//    let coreDataStack: CoreDataStack
+    let coreDataStack: CoreDataStack
     let userDefaults: UserDefaults
     // Add other shared services here: networking, analytics, etc.
 }
