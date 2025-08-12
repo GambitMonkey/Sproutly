@@ -9,6 +9,6 @@ import Foundation
 
 struct Strings {
     struct Onboarding {
-        static let getStartedTitle = String(localized: "plant", defaultValue: "Plant")
+        static let getStartedTitle = String(localized: "start", defaultValue: "Start")
     }
 }
