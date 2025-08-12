@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         let dependencies = AppDependencies(
-//            coreDataStack: CoreDataStack(modelName: "Sproutly"),
+            coreDataStack: CoreDataStack(),
             userDefaults: .standard
         )
         

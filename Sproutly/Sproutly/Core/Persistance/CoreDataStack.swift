@@ -10,18 +10,24 @@ import CoreData
 
 final class CoreDataStack {
     static let shared = CoreDataStack() // Singleton for now — can refactor to DI later
+    private let persistentContainer: NSPersistentContainer
     
-    private init() {}
-    
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Sproutly")
-        container.loadPersistentStores { _, error in
+    init(inMemory: Bool = false) {
+        persistentContainer = NSPersistentContainer(name: "Sproutly")
+        
+        if inMemory {
+            let description = NSPersistentStoreDescription()
+            description.type = NSInMemoryStoreType
+            persistentContainer.persistentStoreDescriptions = [description]
+        }
+        
+        persistentContainer.loadPersistentStores { _, error in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         }
-        return container
-    }()
+    }
+    
     
     var context: NSManagedObjectContext {
         persistentContainer.viewContext
