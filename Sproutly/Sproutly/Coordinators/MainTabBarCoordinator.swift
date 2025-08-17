@@ -13,6 +13,8 @@ final class MainTabBarCoordinator: Coordinator {
     let tabBarController = UITabBarController()
     private let dependencies: AppDependencies
     
+    var onLogout: (() -> Void)?
+    
     init(dependencies: AppDependencies) {
         self.dependencies = dependencies
     }
@@ -31,9 +33,22 @@ final class MainTabBarCoordinator: Coordinator {
             navigationController: profileNav,
             dependencies: dependencies
         )
+        
+        profileCoordinator.handleLogout = { [weak self] in
+            self?.handleLogout()
+        }
+        
         profileCoordinator.start()
         addChild(profileCoordinator)
         
-        tabBarController.viewControllers = [journalNav, profileNav]
+        journalNav.tabBarItem = UITabBarItem(title: Strings.Journal.journalTitle, image: .add, tag: 1)
+        profileNav.tabBarItem = UITabBarItem(title: Strings.Profile.profileTitle, image: .remove, tag: 2)
+        
+        tabBarController.setViewControllers([journalNav, profileNav], animated: false)
+        tabBarController.tabBar.tintColor = .green
+    }
+    
+    private func handleLogout() {
+        onLogout?()
     }
 }
