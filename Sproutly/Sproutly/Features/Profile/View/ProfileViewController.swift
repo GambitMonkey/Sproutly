@@ -1,16 +1,15 @@
 //
-//  OnboardingViewController.swift
+//  ProfileViewController.swift
 //  Sproutly
 //
-//  Created by Deniz Turan Çağlarca on 12.08.2025.
+//  Created by Deniz Turan Çağlarca on 17.08.2025.
 //
-
 
 import UIKit
 
-final class OnboardingViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     
-    var onFinish: (() -> Void)?
+    var onLogout: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +18,7 @@ final class OnboardingViewController: UIViewController {
     
     private func setupButton() {
         let button = UIButton(type: .system)
-        button.setTitle(Strings.Onboarding.getStartedTitle, for: .normal)
+        button.setTitle(Strings.Login.logOutText, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didTapGetStarted), for: .touchUpInside)
@@ -33,6 +32,6 @@ final class OnboardingViewController: UIViewController {
     }
     
     @objc private func didTapGetStarted() {
-        onFinish?()
+        onLogout?()
     }
 }

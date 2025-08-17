@@ -8,19 +8,23 @@
 
 import UIKit
 
-import UIKit
-
 final class AppCoordinator: NavigationCoordinator {
+    var navigationController: UINavigationController
+    internal var childCoordinators: [Coordinator] = []
+    
     private let window: UIWindow
     private let dependencies: AppDependencies
     
-    init(window: UIWindow, dependencies: AppDependencies) {
+    init(window: UIWindow, dependencies: AppDependencies, navigationController: UINavigationController) {
         self.window = window
         self.dependencies = dependencies
-        super.init() // uses default UINavigationController
+        self.navigationController = navigationController
     }
     
-    override func start() {
+    func start() {
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
+        
         if dependencies.userDefaults.bool(forKey: Keys.UserDefaults.hasCompletedOnboarding) {
             showMainTabBar()
         } else {
@@ -29,34 +33,24 @@ final class AppCoordinator: NavigationCoordinator {
     }
     
     private func showOnboarding() {
-        let onboardingCoordinator = OnboardingCoordinator(dependencies: dependencies)
-
-        // 1️⃣ Retain coordinator
-        addChild(onboardingCoordinator)
-
-        onboardingCoordinator.onFinish = { [weak self, weak onboardingCoordinator] in
-            guard let self = self else { return }
-            self.dependencies.userDefaults.set(true, forKey: Keys.UserDefaults.hasCompletedOnboarding)
-            
-            if let onboardingCoordinator {
-                self.removeChild(onboardingCoordinator)
-            }
-            
-            self.showMainTabBar()
+        let onboardingVc = OnboardingViewController()
+        
+        onboardingVc.onFinish = { [weak self] in
+            // self.dependencies.userDefaults.set(true, forKey: Keys.UserDefaults.hasCompletedOnboarding)
+            self?.showMainTabBar()
         }
-
-        // 2️⃣ Show onboarding as root
-        window.rootViewController = onboardingCoordinator.rootViewController
-        window.makeKeyAndVisible()
-
-        onboardingCoordinator.start()
+        
+        navigationController.pushViewController(onboardingVc, animated: false)
     }
     
     private func showMainTabBar() {
-        let tabBarCoordinator = MainTabBarCoordinator(dependencies: dependencies)
-        addChild(tabBarCoordinator)
-        window.rootViewController = tabBarCoordinator.tabBarController
-        window.makeKeyAndVisible()
-        tabBarCoordinator.start()
+        let mainTabBarCoordinator = MainTabBarCoordinator(dependencies: dependencies)
+        addChild(mainTabBarCoordinator)
+        mainTabBarCoordinator.onLogout = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+            self?.showOnboarding()
+        }
+        mainTabBarCoordinator.start()
+        navigationController.pushViewController(mainTabBarCoordinator.tabBarController, animated: true)
     }
 }
