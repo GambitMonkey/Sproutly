@@ -25,6 +25,12 @@ final class AppCoordinator: NavigationCoordinator {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         
+        // Jump to login for UI Test
+        if CommandLine.arguments.contains("-skipOnboarding") {
+            showLogin()
+            return
+        }
+        
         if dependencies.userDefaults.bool(forKey: Keys.UserDefaults.hasCompletedOnboarding) {
             showMainTabBar()
         } else {
@@ -37,19 +43,39 @@ final class AppCoordinator: NavigationCoordinator {
         
         onboardingVc.onFinish = { [weak self] in
             // self.dependencies.userDefaults.set(true, forKey: Keys.UserDefaults.hasCompletedOnboarding)
-            self?.showMainTabBar()
+            self?.showLogin()
         }
         
         navigationController.pushViewController(onboardingVc, animated: false)
     }
     
+    private func showLogin() {
+        let loginCoordinator = LoginCoordinator(dependencies: dependencies, navigationController: navigationController)
+        
+        loginCoordinator.onFinish = { [weak self, weak loginCoordinator] in
+            if let loginCoordinator {
+                self?.removeChild(loginCoordinator)
+            }
+            self?.showMainTabBar()
+        }
+        
+        addChild(loginCoordinator)
+        loginCoordinator.start()
+    }
+
+    
     private func showMainTabBar() {
         let mainTabBarCoordinator = MainTabBarCoordinator(dependencies: dependencies)
-        addChild(mainTabBarCoordinator)
-        mainTabBarCoordinator.onLogout = { [weak self] in
-            self?.navigationController.popViewController(animated: true)
-            self?.showOnboarding()
+        
+        mainTabBarCoordinator.onLogout = { [weak self, weak mainTabBarCoordinator] in
+            if let mainTabBarCoordinator {
+                self?.removeChild(mainTabBarCoordinator)
+            }
+//            self?.navigationController.popViewController(animated: true)
+            self?.showLogin()
         }
+        
+        addChild(mainTabBarCoordinator)
         mainTabBarCoordinator.start()
         navigationController.pushViewController(mainTabBarCoordinator.tabBarController, animated: true)
     }

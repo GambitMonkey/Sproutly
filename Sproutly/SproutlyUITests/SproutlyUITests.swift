@@ -23,16 +23,6 @@ final class SproutlyUITests: XCTestCase {
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        XCTAssertTrue(app.state == .runningForeground, "App should be running in foreground")
-    }
-
-    @MainActor
     func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
             // This measures how long it takes to launch your application.
@@ -40,5 +30,16 @@ final class SproutlyUITests: XCTestCase {
                 XCUIApplication().launch()
             }
         }
+    }
+    
+    func testloginScreenAppears() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-skipOnboarding"] // ✅ skip straight to login
+        app.launch()
+        
+        // Verify Login screen shows
+        XCTAssertTrue(app.textFields["usernameField"].exists)
+        XCTAssertTrue(app.secureTextFields["passwordField"].exists)
+        XCTAssertTrue(app.buttons["loginButton"].exists)
     }
 }
