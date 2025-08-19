@@ -21,6 +21,9 @@ struct Strings {
     }
     
     struct Login {
+        static let usernameText = String(localized: "username", defaultValue: "Username")
+        static let passwordText = String(localized: "password", defaultValue: "Password")
+        static let loginText = String(localized: "login", defaultValue: "Login")
         static let logOutText = String(localized: "logout", defaultValue: "Log Out")
     }
 }
