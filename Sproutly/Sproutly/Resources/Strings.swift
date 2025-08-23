@@ -14,6 +14,8 @@ struct Strings {
     
     struct Journal {
         static let journalTitle = String(localized: "journal", defaultValue: "Journal")
+        static let journalEntryTitle = String(localized: "journalEntries", defaultValue: "Journal Entries")
+        static let journalNoEntryText = String(localized: "journalNoEntries", defaultValue: "No Entries Yet")
     }
     
     struct Profile {

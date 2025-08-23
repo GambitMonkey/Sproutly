@@ -18,6 +18,34 @@
         }
       }
     },
+    "journalEntries" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Journal Entries"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Günlük Kayıtları"
+          }
+        }
+      }
+    },
+    "journalNoEntries" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No Entries Yet"
+          }
+        }
+      }
+    },
     "login" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -48,6 +76,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Çıkış Yap"
+          }
+        }
+      }
+    },
+    "noJournalEntries" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No entries yet"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Henüz kayıt yok"
           }
         }
       }
