@@ -13,15 +13,15 @@ final class JournalCoordinator: NavigationCoordinator {
     var navigationController: UINavigationController
     
     var handleLogout: (() -> Void)?
-
+    
     init(navigationController: UINavigationController, dependencies: AppDependencies) {
         self.dependencies = dependencies
         self.navigationController = navigationController
     }
-
+    
     func start() {
-        let vc = UIViewController() // Replace with JournalViewController
-        vc.view.backgroundColor = .gray
-        navigationController.setViewControllers([vc], animated: false)
+        let repository = JournalRepository(coreDataStack: dependencies.coreDataStack)
+        let journalVC = JournalViewController(repository: repository)
+        navigationController.setViewControllers([journalVC], animated: false)
     }
 }
