@@ -9,10 +9,11 @@
 import CoreData
 
 final class PlantRepository: PlantRepositoryProtocol {
-    private let context: NSManagedObjectContext
+    private let coreDataStack: CoreDataStack
+    private var context: NSManagedObjectContext { coreDataStack.context }
     
-    init(context: NSManagedObjectContext = CoreDataStack.shared.context) {
-        self.context = context
+    init(coreDataStack: CoreDataStack) {
+        self.coreDataStack = coreDataStack
     }
     
     func createPlant(name: String) {
