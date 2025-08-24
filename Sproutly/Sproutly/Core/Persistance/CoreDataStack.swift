@@ -9,15 +9,23 @@
 import CoreData
 
 final class CoreDataStack {
-    static let shared = CoreDataStack() // Singleton for now — can refactor to DI later
+    private static let sharedModel: NSManagedObjectModel = {
+        guard let modelURL = Bundle(for: JournalEntry.self).url(forResource: "Sproutly", withExtension: "momd"),
+              let model = NSManagedObjectModel(contentsOf: modelURL) else {
+            fatalError("Failed to load Core Data model")
+        }
+        return model
+    }()
+    
     private let persistentContainer: NSPersistentContainer
     
     init(inMemory: Bool = false) {
-        persistentContainer = NSPersistentContainer(name: "Sproutly")
+        persistentContainer = NSPersistentContainer(name: "Sproutly", managedObjectModel: CoreDataStack.sharedModel)
         
         if inMemory {
             let description = NSPersistentStoreDescription()
             description.type = NSInMemoryStoreType
+            description.shouldAddStoreAsynchronously = false
             persistentContainer.persistentStoreDescriptions = [description]
         }
         

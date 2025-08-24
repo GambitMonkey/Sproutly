@@ -9,13 +9,13 @@ import CoreData
 
 final class JournalRepository: JournalRepositoryProtocol {
     private let coreDataStack: CoreDataStack
+    private var context: NSManagedObjectContext { coreDataStack.context }
     
     init(coreDataStack: CoreDataStack) {
         self.coreDataStack = coreDataStack
     }
     
     func fetchEntries() -> [JournalEntry] {
-        let context = coreDataStack.context
         let request: NSFetchRequest<JournalEntry> = JournalEntry.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
         
@@ -28,7 +28,6 @@ final class JournalRepository: JournalRepositoryProtocol {
     }
     
     func addEntry(text: String) {
-        let context = coreDataStack.context
         let entry = JournalEntry(context: context)
         entry.id = UUID()
         entry.text = text
@@ -38,7 +37,6 @@ final class JournalRepository: JournalRepositoryProtocol {
     }
     
     func deleteEntry(_ entry: JournalEntry) {
-        let context = coreDataStack.context
         context.delete(entry)
         coreDataStack.saveContext()
     }
